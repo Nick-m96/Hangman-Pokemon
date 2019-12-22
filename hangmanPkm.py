@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import random
+import requests
 
 GALLOW = ['''   
 
@@ -74,7 +75,7 @@ GALLOW = ['''
        /|\  |
         |   |
        / \  =========''']
-POKEMON = ['charmander', 'squirtle', 'bulbasaur', 'charizard', 'venusaur']
+POKEMON = requests.get('https://pokeapi.co/api/v2/pokemon/{}'.format(random.randint(1,151))).json()['name']
 
 def title():
     print('''
@@ -86,19 +87,18 @@ def title():
     The player must guess the Pokemon name. Only have the 1 gen
     ***********************************************************''')
 
-def startGame(pokemon):
+def startGame():
     fails = 0
-    pokemon
-    hiddenPkm = ['-'] *len(pokemon)
+    hiddenPkm = ['-'] *len(POKEMON)
     isComplete = False
     
-    while True:
+    while fails < 8 and isComplete == False:
         indexes = list()
         displayImage(hiddenPkm, fails)
         letter = input('Pick a letter: ')
 
-        for i in range(len(pokemon)):
-            if letter == pokemon[i]:
+        for i in range(len(POKEMON)):
+            if letter == POKEMON[i]:
                 indexes.append(i)
         if len(indexes) == 0:
             fails += 1
@@ -106,17 +106,15 @@ def startGame(pokemon):
             isComplete = True
             for i in indexes:
                 hiddenPkm[i] = letter
-            for i in range(len(pokemon)):
-                if pokemon[i] != hiddenPkm[i]:
+            for i in range(len(POKEMON)):
+                if POKEMON[i] != hiddenPkm[i]:
                     isComplete = False
 
-        if fails == 8: 
-            displayImage(hiddenPkm,fails)
-            print('You fail, the pokemon was {} :('.format(pokemon))
-            break
-        elif isComplete == True:
-            print('You win :D')
-            break
+    if fails == 8: 
+        print('You fail, the pokemon was {} :('.format(POKEMON))
+    else:
+        displayImage(hiddenPkm, fails)
+        print('You win :D')
 
 def displayImage(hiddenPkm, index):
     print(GALLOW[index])
@@ -126,9 +124,6 @@ def displayImage(hiddenPkm, index):
 
 if __name__ == "__main__":
     title()
-
-    pkm = random.randint(0, len(POKEMON)-1)
-
-    startGame(POKEMON[pkm])
+    startGame()
 
 
