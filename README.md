@@ -20,13 +20,6 @@ running.
 ```shell
 git clone https://github.com/NickMano/Hangman-Pokemon.git
 cd Hangman-Pokemon
-
-### Recomended ###
-python3 -m venv venv 
-source venv/bin/activate
-### Recomended ### 
-
-pip install -r requirements.txt
 ```
 
 ### Usage
